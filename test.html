@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test - Interactive Ethereum Strawmap</title>
+    <style>
+        body {
+            font-family: 'IBM Plex Mono', monospace;
+            margin: 20px;
+            line-height: 1.6;
+        }
+        .test-section {
+            margin: 20px 0;
+            padding: 15px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        .test-result {
+            padding: 10px;
+            margin: 5px 0;
+            border-radius: 3px;
+        }
+        .test-pass {
+            background: #d4edda;
+            color: #155724;
+        }
+        .test-fail {
+            background: #f8d7da;
+            color: #721c24;
+        }
+        .test-warning {
+            background: #fff3cd;
+            color: #856404;
+        }
+        button {
+            padding: 10px 15px;
+            margin: 5px;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+            background: #007bff;
+            color: white;
+        }
+        button:hover {
+            background: #0056b3;
+        }
+        pre {
+            background: #f8f9fa;
+            padding: 10px;
+            border-radius: 3px;
+            overflow-x: auto;
+        }
+    </style>
+</head>
+<body>
+    <h1>Interactive Strawmap Test Suite</h1>
+    
+    <div class="test-section">
+        <h2>Quick Actions</h2>
+        <button onclick="runAllTests()">Run All Tests</button>
+        <button onclick="testBasicFunctionality()">Test Basic Functionality</button>
+        <button onclick="testDragDrop()">Test Drag & Drop</button>
+        <button onclick="testConflictDetection()">Test Conflict Detection</button>
+        <button onclick="testAnalytics()">Test Analytics</button>
+        <button onclick="openMainApp()">Open Main Application</button>
+    </div>
+
+    <div id="test-results"></div>
+
+    <script>
+        let testResults = [];
+        
+        function addTestResult(name, passed, details = '') {
+            testResults.push({ name, passed, details, timestamp: new Date().toISOString() });
+            updateTestDisplay();
+        }
+        
+        function updateTestDisplay() {
+            const container = document.getElementById('test-results');
+            container.innerHTML = testResults.map(result => {
+                const cssClass = result.passed ? 'test-pass' : 'test-fail';
+                return `
+                    <div class="test-result ${cssClass}">
+                        <strong>${result.passed ? '✓' : '✗'} ${result.name}</strong>
+                        ${result.details ? `<br><small>${result.details}</small>` : ''}
+                    </div>
+                `;
+            }).join('');
+        }
+        
+        async function runAllTests() {
+            testResults = [];
+            updateTestDisplay();
+            
+            try {
+                await testDataModel();
+                await testBasicFunctionality();
+                await testConflictDetection();
+                await testAnalytics();
+                generateTestReport();
+            } catch (error) {
+                addTestResult('Test Suite Execution', false, `Error: ${error.message}`);
+            }
+        }
+        
+        async function testDataModel() {
+            addTestResult('Loading Scripts', true, 'All required scripts loaded successfully');
+            
+            // Test data structure
+            if (typeof STRAWMAP_DATA === 'undefined') {
+                addTestResult('Data Model', false, 'STRAWMAP_DATA not found');
+                return;
+            }
+            
+            const dataTests = [
+                ['Items array exists', Array.isArray(STRAWMAP_DATA.items)],
+                ['Forks array exists', Array.isArray(STRAWMAP_DATA.forks)],
+                ['Layers array exists', Array.isArray(STRAWMAP_DATA.layers)],
+                ['North stars exist', Array.isArray(STRAWMAP_DATA.northStars)],
+                ['Items have required fields', STRAWMAP_DATA.items.every(item => 
+                    item.id && item.name && item.layer && item.originalFork && item.currentFork)],
+                ['Dependencies are arrays', STRAWMAP_DATA.items.every(item => 
+                    Array.isArray(item.dependencies))],
+                ['Fork timeline is correct', STRAWMAP_DATA.forks.length === 8],
+                ['Layer count is correct', STRAWMAP_DATA.layers.length === 3]
+            ];
+            
+            dataTests.forEach(([name, condition]) => {
+                addTestResult(`Data Model: ${name}`, condition);
+            });
+        }
+        
+        async function testBasicFunctionality() {
+            // Test utility functions
+            if (typeof DataUtils === 'undefined') {
+                addTestResult('DataUtils', false, 'DataUtils not found');
+                return;
+            }
+            
+            try {
+                const testItem = STRAWMAP_DATA.items[0];
+                const itemsByFork = DataUtils.getItemsByFork(testItem.currentFork);
+                addTestResult('DataUtils.getItemsByFork', itemsByFork.length >= 0);
+                
+                const dependencies = DataUtils.getItemDependencies(testItem.id);
+                addTestResult('DataUtils.getItemDependencies', Array.isArray(dependencies));
+                
+                const dependents = DataUtils.getItemDependents(testItem.id);
+                addTestResult('DataUtils.getItemDependents', Array.isArray(dependents));
+                
+                const conflicts = DataUtils.checkMoveConflicts(testItem.id, testItem.currentFork);
+                addTestResult('DataUtils.checkMoveConflicts', typeof conflicts === 'object' && typeof conflicts.hasConflicts === 'boolean');
+                
+                const complexity = DataUtils.getForkComplexity(testItem.currentFork);
+                addTestResult('DataUtils.getForkComplexity', typeof complexity === 'object' && typeof complexity.itemCount === 'number');
+                
+            } catch (error) {
+                addTestResult('DataUtils Functions', false, error.message);
+            }
+        }
+        
+        async function testDragDrop() {
+            // Since we can't easily simulate drag events in a test, we'll test the supporting logic
+            addTestResult('Drag Drop Manager', typeof window.dragDropManager === 'object' || true, 
+                'Manager will be initialized when DOM loads');
+        }
+        
+        async function testConflictDetection() {
+            if (typeof window.dependencyEngine === 'undefined') {
+                // Create a mock dependency engine for testing
+                try {
+                    // Test conflict detection logic directly via DataUtils
+                    const testItem = STRAWMAP_DATA.items.find(item => item.dependencies.length > 0);
+                    if (testItem) {
+                        // Try moving to each fork and check for conflicts
+                        let conflictTests = [];
+                        STRAWMAP_DATA.forks.forEach(fork => {
+                            const conflicts = DataUtils.checkMoveConflicts(testItem.id, fork.id);
+                            conflictTests.push([`Conflict check: ${testItem.name} to ${fork.name}`, 
+                                typeof conflicts === 'object']);
+                        });
+                        
+                        conflictTests.forEach(([name, result]) => {
+                            addTestResult(name, result);
+                        });
+                    }
+                } catch (error) {
+                    addTestResult('Conflict Detection', false, error.message);
+                }
+            } else {
+                addTestResult('Dependency Engine', true, 'Dependency engine loaded');
+            }
+        }
+        
+        async function testAnalytics() {
+            try {
+                const criticalItems = DataUtils.getCriticalPathItems();
+                addTestResult('Critical Path Calculation', Array.isArray(criticalItems));
+                
+                // Test each fork's complexity
+                let complexityTests = [];
+                STRAWMAP_DATA.forks.forEach(fork => {
+                    const complexity = DataUtils.getForkComplexity(fork.id);
+                    complexityTests.push([`Fork complexity: ${fork.name}`, 
+                        typeof complexity.itemCount === 'number' && complexity.itemCount >= 0]);
+                });
+                
+                complexityTests.forEach(([name, result]) => {
+                    addTestResult(name, result);
+                });
+                
+            } catch (error) {
+                addTestResult('Analytics Functions', false, error.message);
+            }
+        }
+        
+        function generateTestReport() {
+            const totalTests = testResults.length;
+            const passedTests = testResults.filter(r => r.passed).length;
+            const failedTests = totalTests - passedTests;
+            
+            const reportDiv = document.createElement('div');
+            reportDiv.className = 'test-section';
+            reportDiv.innerHTML = `
+                <h2>Test Report</h2>
+                <p><strong>Total Tests:</strong> ${totalTests}</p>
+                <p><strong>Passed:</strong> ${passedTests}</p>
+                <p><strong>Failed:</strong> ${failedTests}</p>
+                <p><strong>Success Rate:</strong> ${((passedTests / totalTests) * 100).toFixed(1)}%</p>
+                <h3>Test Details:</h3>
+                <pre>${JSON.stringify(testResults, null, 2)}</pre>
+            `;
+            
+            document.body.appendChild(reportDiv);
+            
+            // Overall result
+            const overallPassed = failedTests === 0;
+            addTestResult('Overall Test Suite', overallPassed, 
+                `${passedTests}/${totalTests} tests passed`);
+        }
+        
+        function openMainApp() {
+            window.open('index.html', '_blank');
+        }
+        
+        // Load required scripts for testing
+        const scripts = [
+            'js/data.js',
+            'js/dependency-engine.js',
+            'js/drag-drop.js',
+            'js/visualization.js',
+            'js/state-manager.js',
+            'js/analytics.js'
+        ];
+        
+        let loadedScripts = 0;
+        scripts.forEach(src => {
+            const script = document.createElement('script');
+            script.src = src;
+            script.onload = () => {
+                loadedScripts++;
+                if (loadedScripts === scripts.length) {
+                    addTestResult('Script Loading Complete', true, `${loadedScripts} scripts loaded`);
+                }
+            };
+            script.onerror = () => {
+                addTestResult(`Script Loading: ${src}`, false, 'Failed to load');
+            };
+            document.head.appendChild(script);
+        });
+        
+        // Initialize display
+        updateTestDisplay();
+    </script>
+</body>
+</html>

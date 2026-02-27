@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Ethereum Strawmap</title>
+    <link rel="stylesheet" href="styles/main.css">
+</head>
+<body>
+    <header class="header">
+        <div class="header-content">
+            <h1>Interactive Ethereum Strawmap</h1>
+            <div class="header-controls">
+                <button id="resetBtn" class="btn btn-secondary">Reset to Original</button>
+                <button id="exportBtn" class="btn btn-primary">Export Configuration</button>
+                <button id="helpBtn" class="btn btn-outline">Help</button>
+            </div>
+        </div>
+    </header>
+
+    <div class="toolbar">
+        <div class="toolbar-section">
+            <label>
+                <input type="checkbox" id="showCriticalPath"> 
+                Show Critical Path
+            </label>
+            <label>
+                <input type="checkbox" id="showComplexity"> 
+                Show Fork Complexity
+            </label>
+        </div>
+        <div class="toolbar-section">
+            <button id="undoBtn" class="btn btn-small" disabled>Undo</button>
+            <button id="redoBtn" class="btn btn-small" disabled>Redo</button>
+        </div>
+        <div class="toolbar-section">
+            <span id="statusMessage" class="status-message"></span>
+        </div>
+    </div>
+
+    <main class="main-content">
+        <div class="roadmap-container">
+            <div class="layer-labels">
+                <div class="layer-label consensus-layer">Consensus Layer</div>
+                <div class="layer-label data-layer">Data Layer</div>
+                <div class="layer-label execution-layer">Execution Layer</div>
+            </div>
+            
+            <div class="roadmap-grid" id="roadmapGrid">
+                <!-- Fork columns will be generated dynamically -->
+            </div>
+            
+            <svg class="dependency-overlay" id="dependencyOverlay">
+                <!-- Dependency arrows will be rendered here -->
+            </svg>
+        </div>
+    </main>
+
+    <div id="conflictModal" class="modal">
+        <div class="modal-content">
+            <h3>Dependency Conflict Detected</h3>
+            <div id="conflictDetails"></div>
+            <div class="modal-actions">
+                <button id="autoResolveBtn" class="btn btn-primary">Auto-Resolve Conflicts</button>
+                <button id="proceedAnywayBtn" class="btn btn-secondary">Proceed Anyway</button>
+                <button id="cancelMoveBtn" class="btn btn-outline">Cancel Move</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="helpModal" class="modal">
+        <div class="modal-content">
+            <h3>How to Use Interactive Strawmap</h3>
+            <div class="help-content">
+                <h4>Drag and Drop</h4>
+                <p>Drag roadmap items between fork columns to explore different timeline scenarios.</p>
+                
+                <h4>Dependency Warnings</h4>
+                <p>When you move an item that breaks dependencies, you'll see warnings and auto-suggestions.</p>
+                
+                <h4>Visual Indicators</h4>
+                <ul>
+                    <li><strong>Critical Path:</strong> Items that block the most others</li>
+                    <li><strong>Fork Complexity:</strong> Number and difficulty of items per fork</li>
+                    <li><strong>Dependency Arrows:</strong> Technical prerequisites between items</li>
+                </ul>
+                
+                <h4>Controls</h4>
+                <ul>
+                    <li><strong>Reset:</strong> Return to original strawmap configuration</li>
+                    <li><strong>Undo/Redo:</strong> Navigate through your changes</li>
+                    <li><strong>Export:</strong> Save your modified roadmap configuration</li>
+                </ul>
+            </div>
+            <button class="btn btn-primary modal-close">Got it!</button>
+        </div>
+    </div>
+
+    <script src="js/data.js"></script>
+    <script src="js/dependency-engine.js"></script>
+    <script src="js/drag-drop.js"></script>
+    <script src="js/visualization.js"></script>
+    <script src="js/state-manager.js"></script>
+    <script src="js/analytics.js"></script>
+    <script src="js/main.js"></script>
+</body>
+</html>
