@@ -27,12 +27,12 @@ This interactive version is based on the official [Ethereum Strawmap](https://st
 ## 🔧 Quick Start
 
 ### Option 1: GitHub Pages (Recommended)
-Visit the live version at: [Your GitHub Pages URL]
+Visit the live version at: **https://0xapriori.github.io/interactive-ethereum-strawmap/**
 
 ### Option 2: Local Development
 ```bash
 # Clone the repository
-git clone [your-repo-url]
+git clone https://github.com/0xapriori/interactive-ethereum-strawmap.git
 cd interactive-strawmap
 
 # Start a local web server
