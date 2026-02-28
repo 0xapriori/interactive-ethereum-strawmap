@@ -1,5 +1,5 @@
 // Ethereum Strawmap Data Model
-// Based on the official strawmap.org roadmap structure
+// Based on the CURRENT official strawmap.org roadmap (February 2026)
 
 const STRAWMAP_DATA = {
   // Fork timeline with rough 6-month cadence through 2029
@@ -21,86 +21,53 @@ const STRAWMAP_DATA = {
     { id: 'execution', name: 'Execution Layer', color: '#50c878' }
   ],
 
-  // Five North Stars - long-term strategic goals
+  // Five North Stars - long-term strategic goals from current strawmap
   northStars: [
     {
       id: 'fast-l1',
       name: 'fast L1',
-      description: 'transaction inclusion and chain finality in seconds',
+      description: 'sub-second finality with 2-second slots',
       layer: 'consensus',
       targetFork: 'l-star'
     },
     {
       id: 'gigagas-l1',
       name: 'gigagas L1',
-      description: '1 gigagas/sec (10K TPS) at L1, via zkEVMs and real-time proving',
+      description: '~10,000 TPS via zkEVMs and real-time proving',
       layer: 'execution',
       targetFork: 'l-star'
     },
     {
       id: 'teragas-l2',
       name: 'teragas L2',
-      description: '1 gigabyte/sec (10M TPS) at L2, via data availability sampling',
+      description: '~10 million TPS via Data Availability Sampling',
       layer: 'data',
       targetFork: 'k-star'
     },
     {
       id: 'post-quantum-l1',
       name: 'post quantum L1',
-      description: 'centuries-long cryptographic security, via hash-based schemes',
+      description: 'quantum-resistant cryptography for century-scale security',
       layer: 'consensus',
       targetFork: 'j-star'
     },
     {
       id: 'private-l1',
       name: 'private L1',
-      description: 'privacy as a first-class citizen, via L1 shielded transfers',
+      description: 'native privacy via shielded ETH transfers',
       layer: 'execution',
       targetFork: 'k-star'
     }
   ],
 
-  // Roadmap items with dependencies based on strawmap.org
+  // Roadmap items based on CURRENT strawmap.org (February 2026)
   items: [
-    // Electra fork items
+    // Electra fork items (mostly shipped)
     {
-      id: 'peerdasv1',
+      id: 'peerdas-v1',
       name: 'PeerDAS v1',
       description: 'Peer-based Data Availability Sampling',
       layer: 'data',
-      originalFork: 'electra',
-      currentFork: 'electra',
-      type: 'regular',
-      dependencies: [],
-      complexity: 'medium'
-    },
-    {
-      id: 'inclusion-lists',
-      name: 'Inclusion Lists',
-      description: 'Censorship resistance mechanism',
-      layer: 'consensus',
-      originalFork: 'electra',
-      currentFork: 'electra',
-      type: 'regular',
-      dependencies: [],
-      complexity: 'medium'
-    },
-    {
-      id: 'max-eb',
-      name: 'Max EB',
-      description: 'Maximum effective balance increase',
-      layer: 'consensus',
-      originalFork: 'electra',
-      currentFork: 'electra',
-      type: 'regular',
-      dependencies: [],
-      complexity: 'low'
-    },
-    {
-      id: 'eip-7702',
-      name: 'EIP-7702',
-      description: 'Set EOA account code for one transaction',
-      layer: 'execution',
       originalFork: 'electra',
       currentFork: 'electra',
       type: 'regular',
@@ -112,240 +79,174 @@ const STRAWMAP_DATA = {
     {
       id: 'verkle-trees',
       name: 'Verkle Trees',
-      description: 'Improved state tree structure',
+      description: 'Stateless-friendly tree structure',
       layer: 'execution',
       originalFork: 'fulu',
       currentFork: 'fulu',
       type: 'headliner',
       dependencies: [],
-      complexity: 'high'
+      complexity: 'very-high'
     },
     {
-      id: 'das-extension',
-      name: 'DAS Extension',  
-      description: 'Extended Data Availability Sampling',
+      id: 'peerdas-scaling',
+      name: 'PeerDAS Scaling',
+      description: 'Extended Data Availability Sampling capabilities',
       layer: 'data',
       originalFork: 'fulu',
       currentFork: 'fulu',
       type: 'regular',
-      dependencies: ['peerdasv1'],
-      complexity: 'medium'
-    },
-    {
-      id: 'ssf-research',
-      name: 'SSF Research',
-      description: 'Single Slot Finality research',
-      layer: 'consensus',
-      originalFork: 'fulu',
-      currentFork: 'fulu',
-      type: 'regular',
-      dependencies: [],
+      dependencies: ['peerdas-v1'],
       complexity: 'high'
-    },
-    {
-      id: 'history-expiry',
-      name: 'History Expiry',
-      description: 'Limit historical data requirements',
-      layer: 'data',
-      originalFork: 'fulu',
-      currentFork: 'fulu',
-      type: 'regular',
-      dependencies: [],
-      complexity: 'medium'
     },
 
-    // Glamsterdam fork items (explicit headliners from strawmap)
+    // Glamsterdam fork items (ACTUAL current headliners)
     {
-      id: 'epbs',
-      name: 'ePBS',
+      id: 'epbs-eip7732',
+      name: 'ePBS (EIP-7732)',
       description: 'Enshrined Proposer-Builder Separation',
       layer: 'consensus',
       originalFork: 'glamsterdam',
       currentFork: 'glamsterdam',
       type: 'headliner',
-      dependencies: ['inclusion-lists'],
-      complexity: 'high'
+      dependencies: [],
+      complexity: 'very-high'
     },
     {
-      id: 'bals',
-      name: 'BALs',
-      description: 'Block-level Access Lists',
+      id: 'bals-eip7928',
+      name: 'BALs (EIP-7928)',
+      description: 'Block-Level Access Lists for parallel execution',
       layer: 'execution',
       originalFork: 'glamsterdam',
       currentFork: 'glamsterdam',
       type: 'headliner',
       dependencies: ['verkle-trees'],
-      complexity: 'high'
+      complexity: 'very-high'
     },
     {
-      id: 'slot-time-reduction',
-      name: '6s Slot Times', 
-      description: 'Reduce slot times from 12s to 6s',
-      layer: 'consensus',
-      originalFork: 'glamsterdam',
-      currentFork: 'glamsterdam',
-      type: 'regular',
-      dependencies: ['ssf-research'],
-      complexity: 'medium'
-    },
-    {
-      id: 'mev-burn',
-      name: 'MEV Burn',
-      description: 'Mechanism to burn MEV profits',
-      layer: 'execution',
-      originalFork: 'glamsterdam',
-      currentFork: 'glamsterdam',
-      type: 'regular',
-      dependencies: ['epbs'],
-      complexity: 'medium'
-    },
-    {
-      id: 'state-expiry',
-      name: 'State Expiry',
-      description: 'Limit state growth requirements',
-      layer: 'execution',
-      originalFork: 'glamsterdam',
-      currentFork: 'glamsterdam',
-      type: 'regular',
-      dependencies: ['verkle-trees'],
-      complexity: 'high'
-    },
-    {
-      id: 'das-v2',
-      name: 'DAS v2',
-      description: 'Advanced Data Availability Sampling',
+      id: 'blob-increases',
+      name: 'Blob Parameter Increases',
+      description: 'Scaling to 48 blobs per block',
       layer: 'data',
       originalFork: 'glamsterdam',
       currentFork: 'glamsterdam',
       type: 'regular',
-      dependencies: ['das-extension'],
-      complexity: 'high'
+      dependencies: ['peerdas-scaling'],
+      complexity: 'medium'
     },
-
-    // Hegotá fork items (post-quantum focus)
     {
-      id: 'hash-based-sigs',
-      name: 'Hash-based Signatures',
-      description: 'Quantum-resistant signature schemes',
+      id: 'gas-repricings',
+      name: 'Gas Repricings',
+      description: 'Optimize gas pricing for parallel execution',
+      layer: 'execution',
+      originalFork: 'glamsterdam',
+      currentFork: 'glamsterdam',
+      type: 'regular',
+      dependencies: [],
+      complexity: 'medium'
+    },
+    {
+      id: '8s-slots',
+      name: '8s Slot Times',
+      description: 'Reduce slot times from 12s to 8s',
       layer: 'consensus',
-      originalFork: 'hegota',
-      currentFork: 'hegota',
+      originalFork: 'glamsterdam',
+      currentFork: 'glamsterdam',
       type: 'regular',
       dependencies: [],
       complexity: 'high'
     },
+
+    // Hegotá fork items (Post-quantum focus)
+    {
+      id: 'hash-based-signatures',
+      name: 'Hash-based Signatures',
+      description: 'Post-quantum signature schemes (XMSS, SPHINCS+)',
+      layer: 'consensus',
+      originalFork: 'hegota',
+      currentFork: 'hegota',
+      type: 'headliner',
+      dependencies: [],
+      complexity: 'very-high'
+    },
     {
       id: 'lattice-cryptography',
-      name: 'Lattice Cryptography',
+      name: 'Lattice-based Cryptography',
       description: 'Post-quantum cryptographic primitives',
       layer: 'execution',
       originalFork: 'hegota',
       currentFork: 'hegota',
       type: 'regular',
       dependencies: [],
-      complexity: 'high'
+      complexity: 'very-high'
     },
     {
-      id: 'pq-aggregation',
-      name: 'PQ Aggregation',
-      description: 'Post-quantum signature aggregation',
+      id: 'pq-transition-plan',
+      name: 'PQ Transition Plan',
+      description: 'Coordinated post-quantum migration strategy',
       layer: 'consensus',
       originalFork: 'hegota',
       currentFork: 'hegota',
       type: 'regular',
-      dependencies: ['hash-based-sigs'],
-      complexity: 'high'
-    },
-    {
-      id: 'commitment-schemes',
-      name: 'PQ Commitment Schemes',
-      description: 'Post-quantum commitment schemes',
-      layer: 'data',
-      originalFork: 'hegota',
-      currentFork: 'hegota',
-      type: 'regular',
-      dependencies: [],
+      dependencies: ['hash-based-signatures'],
       complexity: 'high'
     },
 
     // I* fork items
     {
-      id: '4s-slot-times',
+      id: '4s-slots',
       name: '4s Slot Times',
       description: 'Further slot time reduction',
       layer: 'consensus',
       originalFork: 'i-star',
       currentFork: 'i-star',
       type: 'regular',
-      dependencies: ['slot-time-reduction'],
-      complexity: 'medium'
-    },
-    {
-      id: 'zkevms-v1',
-      name: 'zkEVMs v1',
-      description: 'Zero-knowledge Ethereum Virtual Machines',
-      layer: 'execution',
-      originalFork: 'i-star',
-      currentFork: 'i-star',
-      type: 'regular',
-      dependencies: ['bals', 'lattice-cryptography'],
+      dependencies: ['8s-slots', 'epbs-eip7732'],
       complexity: 'very-high'
     },
     {
-      id: 'full-das',
-      name: 'Full DAS',
-      description: 'Complete Data Availability Sampling implementation',
+      id: 'zkevms-integration',
+      name: 'zkEVMs Integration',
+      description: 'Native zkEVM support for scaling',
+      layer: 'execution',
+      originalFork: 'i-star',
+      currentFork: 'i-star',
+      type: 'headliner',
+      dependencies: ['bals-eip7928', 'lattice-cryptography'],
+      complexity: 'very-high'
+    },
+    {
+      id: 'advanced-das',
+      name: 'Advanced DAS',
+      description: 'High-throughput Data Availability Sampling',
       layer: 'data',
       originalFork: 'i-star',
       currentFork: 'i-star',
       type: 'regular',
-      dependencies: ['das-v2'],
+      dependencies: ['blob-increases'],
       complexity: 'high'
     },
     {
-      id: 'ssf-implementation',
-      name: 'SSF Implementation',
-      description: 'Single Slot Finality deployment',
-      layer: 'consensus',
-      originalFork: 'i-star',
-      currentFork: 'i-star',
-      type: 'regular',
-      dependencies: ['4s-slot-times', 'ssf-research'],
-      complexity: 'very-high'
-    },
-    {
-      id: 'native-rollup-support',
-      name: 'Native Rollup Support',
-      description: 'Protocol-level rollup integration',
+      id: 'parallel-execution',
+      name: 'Parallel Execution',
+      description: 'Multi-threaded transaction processing',
       layer: 'execution',
       originalFork: 'i-star',
       currentFork: 'i-star',
       type: 'regular',
-      dependencies: ['state-expiry'],
-      complexity: 'high'
+      dependencies: ['bals-eip7928'],
+      complexity: 'very-high'
     },
 
     // J* fork items
     {
-      id: '2s-slot-times',
+      id: '2s-slots',
       name: '2s Slot Times',
-      description: 'Minimum viable slot time',
-      layer: 'consensus',
-      originalFork: 'j-star',
-      currentFork: 'j-star',
-      type: 'regular',
-      dependencies: ['4s-slot-times', 'epbs'],
-      complexity: 'high'
-    },
-    {
-      id: 'quantum-secure-consensus',
-      name: 'Quantum-Secure Consensus',
-      description: 'Full post-quantum consensus layer',
+      description: 'Target slot time for fast L1',
       layer: 'consensus',
       originalFork: 'j-star',
       currentFork: 'j-star',
       type: 'headliner',
-      dependencies: ['hash-based-sigs'],
+      dependencies: ['4s-slots', 'pq-transition-plan'],
       complexity: 'very-high'
     },
     {
@@ -356,110 +257,88 @@ const STRAWMAP_DATA = {
       originalFork: 'j-star',
       currentFork: 'j-star',
       type: 'regular',
-      dependencies: ['zkevms-v1'],
+      dependencies: ['zkevms-integration', 'parallel-execution'],
+      complexity: 'very-high'
+    },
+    {
+      id: 'sub-second-finality',
+      name: 'Sub-second Finality',
+      description: 'Ultra-fast transaction finalization',
+      layer: 'consensus',
+      originalFork: 'j-star',
+      currentFork: 'j-star',
+      type: 'regular',
+      dependencies: ['2s-slots'],
       complexity: 'very-high'
     },
 
     // K* fork items
     {
-      id: 'shielded-transfers',
-      name: 'Shielded Transfers',
-      description: 'Native privacy for L1 transactions',
+      id: 'shielded-eth-transfers',
+      name: 'Shielded ETH Transfers',
+      description: 'Native privacy for ETH transactions',
       layer: 'execution',
       originalFork: 'k-star',
       currentFork: 'k-star',
       type: 'headliner',
-      dependencies: ['real-time-proving', 'quantum-secure-consensus'],
+      dependencies: ['real-time-proving'],
       complexity: 'very-high'
     },
     {
-      id: 'teragas-bandwidth',
-      name: 'Teragas Bandwidth',
-      description: '1GB/s data throughput capability',
+      id: 'teragas-das',
+      name: 'Teragas DAS',
+      description: 'Data Availability for 10M+ TPS L2s',
       layer: 'data',
       originalFork: 'k-star',
       currentFork: 'k-star',
       type: 'regular',
-      dependencies: ['full-das'],
+      dependencies: ['advanced-das'],
       complexity: 'very-high'
     },
     {
-      id: 'light-client-sync',
-      name: 'Light Client Sync',
-      description: 'Optimized light client synchronization',
-      layer: 'consensus',
-      originalFork: 'k-star',
-      currentFork: 'k-star',
-      type: 'regular',
-      dependencies: ['quantum-secure-consensus'],
-      complexity: 'medium'
-    },
-    {
-      id: 'cross-rollup-communication',
-      name: 'Cross-Rollup Communication',
-      description: 'Native communication between rollups',
+      id: 'privacy-infrastructure',
+      name: 'Privacy Infrastructure',
+      description: 'Full privacy-preserving protocol support',
       layer: 'execution',
       originalFork: 'k-star',
       currentFork: 'k-star',
       type: 'regular',
-      dependencies: ['native-rollup-support'],
-      complexity: 'high'
-    },
-
-    // L* fork items (exceptional case with two headliners)
-    {
-      id: 'lean-consensus-v1',
-      name: 'Lean Consensus v1',
-      description: 'Streamlined consensus mechanism',
-      layer: 'consensus',
-      originalFork: 'l-star',
-      currentFork: 'l-star',
-      type: 'headliner',
-      dependencies: ['2s-slot-times', 'quantum-secure-consensus'],
+      dependencies: ['shielded-eth-transfers'],
       complexity: 'very-high'
     },
+
+    // L* fork items (Exceptional case with advanced features)
     {
-      id: 'lean-consensus-v2',
-      name: 'Lean Consensus v2',
-      description: 'Fully optimized consensus layer',
+      id: 'optimized-consensus',
+      name: 'Optimized Consensus',
+      description: 'Ultra-efficient consensus mechanism',
       layer: 'consensus',
       originalFork: 'l-star',
       currentFork: 'l-star',
       type: 'headliner',
-      dependencies: ['lean-consensus-v1'],
+      dependencies: ['sub-second-finality'],
       complexity: 'very-high'
     },
     {
       id: 'gigagas-execution',
       name: 'Gigagas Execution',
-      description: '1 gigagas/sec execution capability',
+      description: '1 gigagas/sec execution capability (~10K TPS L1)',
       layer: 'execution',
       originalFork: 'l-star',
       currentFork: 'l-star',
-      type: 'regular',
-      dependencies: ['shielded-transfers', 'lean-consensus-v2'],
+      type: 'headliner',
+      dependencies: ['privacy-infrastructure', 'real-time-proving'],
       complexity: 'very-high'
     },
     {
-      id: 'perfect-das',
-      name: 'Perfect DAS',
-      description: 'Theoretically optimal data availability',
+      id: 'ultimate-das',
+      name: 'Ultimate DAS',
+      description: 'Theoretical maximum data availability',
       layer: 'data',
       originalFork: 'l-star',
       currentFork: 'l-star',
       type: 'regular',
-      dependencies: ['teragas-bandwidth'],
-      complexity: 'very-high'
-    },
-    {
-      id: 'autonomous-execution',
-      name: 'Autonomous Execution',
-      description: 'Self-optimizing execution layer',
-      layer: 'execution',
-      originalFork: 'l-star',
-      currentFork: 'l-star',
-      type: 'regular',
-      dependencies: ['gigagas-execution', 'cross-rollup-communication'],
+      dependencies: ['teragas-das'],
       complexity: 'very-high'
     }
   ]
