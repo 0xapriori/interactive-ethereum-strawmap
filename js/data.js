@@ -85,6 +85,28 @@ const STRAWMAP_DATA = {
       dependencies: [],
       complexity: 'medium'
     },
+    {
+      id: 'max-eb',
+      name: 'Max EB',
+      description: 'Maximum effective balance increase',
+      layer: 'consensus',
+      originalFork: 'electra',
+      currentFork: 'electra',
+      type: 'regular',
+      dependencies: [],
+      complexity: 'low'
+    },
+    {
+      id: 'eip-7702',
+      name: 'EIP-7702',
+      description: 'Set EOA account code for one transaction',
+      layer: 'execution',
+      originalFork: 'electra',
+      currentFork: 'electra',
+      type: 'regular',
+      dependencies: [],
+      complexity: 'medium'
+    },
 
     // Fulu fork items
     {
@@ -100,13 +122,35 @@ const STRAWMAP_DATA = {
     },
     {
       id: 'das-extension',
-      name: 'DAS Extension',
+      name: 'DAS Extension',  
       description: 'Extended Data Availability Sampling',
       layer: 'data',
       originalFork: 'fulu',
       currentFork: 'fulu',
       type: 'regular',
       dependencies: ['peerdasv1'],
+      complexity: 'medium'
+    },
+    {
+      id: 'ssf-research',
+      name: 'SSF Research',
+      description: 'Single Slot Finality research',
+      layer: 'consensus',
+      originalFork: 'fulu',
+      currentFork: 'fulu',
+      type: 'regular',
+      dependencies: [],
+      complexity: 'high'
+    },
+    {
+      id: 'history-expiry',
+      name: 'History Expiry',
+      description: 'Limit historical data requirements',
+      layer: 'data',
+      originalFork: 'fulu',
+      currentFork: 'fulu',
+      type: 'regular',
+      dependencies: [],
       complexity: 'medium'
     },
 
@@ -135,14 +179,47 @@ const STRAWMAP_DATA = {
     },
     {
       id: 'slot-time-reduction',
-      name: '6s Slot Times',
+      name: '6s Slot Times', 
       description: 'Reduce slot times from 12s to 6s',
       layer: 'consensus',
       originalFork: 'glamsterdam',
       currentFork: 'glamsterdam',
       type: 'regular',
-      dependencies: [],
+      dependencies: ['ssf-research'],
       complexity: 'medium'
+    },
+    {
+      id: 'mev-burn',
+      name: 'MEV Burn',
+      description: 'Mechanism to burn MEV profits',
+      layer: 'execution',
+      originalFork: 'glamsterdam',
+      currentFork: 'glamsterdam',
+      type: 'regular',
+      dependencies: ['epbs'],
+      complexity: 'medium'
+    },
+    {
+      id: 'state-expiry',
+      name: 'State Expiry',
+      description: 'Limit state growth requirements',
+      layer: 'execution',
+      originalFork: 'glamsterdam',
+      currentFork: 'glamsterdam',
+      type: 'regular',
+      dependencies: ['verkle-trees'],
+      complexity: 'high'
+    },
+    {
+      id: 'das-v2',
+      name: 'DAS v2',
+      description: 'Advanced Data Availability Sampling',
+      layer: 'data',
+      originalFork: 'glamsterdam',
+      currentFork: 'glamsterdam',
+      type: 'regular',
+      dependencies: ['das-extension'],
+      complexity: 'high'
     },
 
     // Hegotá fork items (post-quantum focus)
@@ -162,6 +239,28 @@ const STRAWMAP_DATA = {
       name: 'Lattice Cryptography',
       description: 'Post-quantum cryptographic primitives',
       layer: 'execution',
+      originalFork: 'hegota',
+      currentFork: 'hegota',
+      type: 'regular',
+      dependencies: [],
+      complexity: 'high'
+    },
+    {
+      id: 'pq-aggregation',
+      name: 'PQ Aggregation',
+      description: 'Post-quantum signature aggregation',
+      layer: 'consensus',
+      originalFork: 'hegota',
+      currentFork: 'hegota',
+      type: 'regular',
+      dependencies: ['hash-based-sigs'],
+      complexity: 'high'
+    },
+    {
+      id: 'commitment-schemes',
+      name: 'PQ Commitment Schemes',
+      description: 'Post-quantum commitment schemes',
+      layer: 'data',
       originalFork: 'hegota',
       currentFork: 'hegota',
       type: 'regular',
@@ -200,7 +299,29 @@ const STRAWMAP_DATA = {
       originalFork: 'i-star',
       currentFork: 'i-star',
       type: 'regular',
-      dependencies: ['das-extension'],
+      dependencies: ['das-v2'],
+      complexity: 'high'
+    },
+    {
+      id: 'ssf-implementation',
+      name: 'SSF Implementation',
+      description: 'Single Slot Finality deployment',
+      layer: 'consensus',
+      originalFork: 'i-star',
+      currentFork: 'i-star',
+      type: 'regular',
+      dependencies: ['4s-slot-times', 'ssf-research'],
+      complexity: 'very-high'
+    },
+    {
+      id: 'native-rollup-support',
+      name: 'Native Rollup Support',
+      description: 'Protocol-level rollup integration',
+      layer: 'execution',
+      originalFork: 'i-star',
+      currentFork: 'i-star',
+      type: 'regular',
+      dependencies: ['state-expiry'],
       complexity: 'high'
     },
 
@@ -262,6 +383,28 @@ const STRAWMAP_DATA = {
       dependencies: ['full-das'],
       complexity: 'very-high'
     },
+    {
+      id: 'light-client-sync',
+      name: 'Light Client Sync',
+      description: 'Optimized light client synchronization',
+      layer: 'consensus',
+      originalFork: 'k-star',
+      currentFork: 'k-star',
+      type: 'regular',
+      dependencies: ['quantum-secure-consensus'],
+      complexity: 'medium'
+    },
+    {
+      id: 'cross-rollup-communication',
+      name: 'Cross-Rollup Communication',
+      description: 'Native communication between rollups',
+      layer: 'execution',
+      originalFork: 'k-star',
+      currentFork: 'k-star',
+      type: 'regular',
+      dependencies: ['native-rollup-support'],
+      complexity: 'high'
+    },
 
     // L* fork items (exceptional case with two headliners)
     {
@@ -295,6 +438,28 @@ const STRAWMAP_DATA = {
       currentFork: 'l-star',
       type: 'regular',
       dependencies: ['shielded-transfers', 'lean-consensus-v2'],
+      complexity: 'very-high'
+    },
+    {
+      id: 'perfect-das',
+      name: 'Perfect DAS',
+      description: 'Theoretically optimal data availability',
+      layer: 'data',
+      originalFork: 'l-star',
+      currentFork: 'l-star',
+      type: 'regular',
+      dependencies: ['teragas-bandwidth'],
+      complexity: 'very-high'
+    },
+    {
+      id: 'autonomous-execution',
+      name: 'Autonomous Execution',
+      description: 'Self-optimizing execution layer',
+      layer: 'execution',
+      originalFork: 'l-star',
+      currentFork: 'l-star',
+      type: 'regular',
+      dependencies: ['gigagas-execution', 'cross-rollup-communication'],
       complexity: 'very-high'
     }
   ]
